@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Codeforces Daily Challenge",
+  "version": "1.1",
+  "description": "Redirects to a random Codeforces problem daily and restricts browsing until solved.",
+  "permissions": ["storage", "tabs", "webNavigation"],
+  "host_permissions": ["https://codeforces.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://codeforces.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

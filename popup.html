@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Codeforces Daily Challenge</title>
+    <style>
+      :root {
+        --light: #d8dbe0;
+        --dark: #28292c;
+        --link: rgb(27, 129, 112);
+        --link-hover: rgb(24, 94, 82);
+      }
+
+      body {
+        width: 300px;
+        padding: 20px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      h2 {
+        color: #4285f4;
+        margin-top: 0;
+      }
+
+      select,
+      input[type="text"],
+      input[type="number"],
+      button {
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 13px;
+      }
+      button {
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.1s;
+      }
+      button:hover {
+        background-color: #3367d6;
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+      #tagInput {
+        margin-bottom: 5px;
+      }
+      #tagList {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 5px;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        white-space: nowrap;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        background-color: #e0e0e0;
+        color: #333;
+        padding: 2px 6px;
+        border-radius: 12px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .tag button {
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        padding: 0 2px;
+        margin-left: 3px;
+        font-size: 14px;
+      }
+
+      /* Add a custom scrollbar for Webkit browsers */
+      #tagList::-webkit-scrollbar {
+        height: 4px;
+      }
+      #tagList::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      #tagList::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 2px;
+      }
+      #tagList::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+      #killSwitchContainer {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      #killSwitchDuration {
+        width: 50px;
+        text-align: center;
+      }
+      #killSwitch {
+        flex-grow: 1;
+        background-color: #db4437;
+      }
+      #killSwitch:hover {
+        background-color: #c53929;
+      }
+      #status {
+        margin-top: 10px;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 4px;
+        background-color: #e8f0fe;
+        color: #4285f4;
+      }
+      .solved {
+        background-color: #e6f4ea;
+        color: #0f9d58;
+      }
+      .unsolved {
+        background-color: #fce8e6;
+        color: #db4437;
+      }
+      #darkModeContainer {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+      .toggle-switch {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 60px;
+        height: 30px;
+      }
+
+      .toggle-switch label {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: var(--dark);
+        border-radius: 15px;
+        cursor: pointer;
+      }
+
+      .toggle-switch input {
+        position: absolute;
+        display: none;
+      }
+
+      .slider {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 15px;
+        transition: 0.3s;
+      }
+
+      .toggle-switch input:checked ~ .slider {
+        background-color: var(--light);
+      }
+
+      .slider::before {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 4px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        box-shadow: inset 8px -1px 0px 0px var(--light);
+        background-color: var(--dark);
+        transition: 0.3s;
+      }
+
+      .toggle-switch input:checked ~ .slider::before {
+        transform: translateX(30px);
+        background-color: var(--dark);
+        box-shadow: none;
+      }
+
+      /* Dark mode styles */
+      body.dark-mode {
+        background-color: #333;
+        color: #f0f0f0;
+      }
+
+      body.dark-mode select,
+      body.dark-mode input[type="text"],
+      body.dark-mode input[type="number"] {
+        background-color: #444;
+        color: #f0f0f0;
+        border-color: #555;
+      }
+
+      body.dark-mode .tag {
+        background-color: #555;
+        color: #f0f0f0;
+      }
+
+      body.dark-mode #status {
+        background-color: #444;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toggle-switch">
+      <label>
+        <input type="checkbox" id="darkModeToggle" />
+        <span class="slider"></span>
+      </label>
+    </div>
+    <h2>Codeforces Daily Challenge</h2>
+    <label for="rating">Choose Problem Rating:</label>
+    <select id="rating">
+      <option value="800">800</option>
+      <option value="900">900</option>
+      <option value="1000">1000</option>
+      <option value="1100">1100</option>
+      <option value="1200">1200</option>
+      <option value="1300">1300</option>
+      <option value="1400">1400</option>
+      <option value="1500">1500</option>
+      <option value="1600">1600</option>
+      <option value="1700">1700</option>
+      <option value="1800">1800</option>
+      <option value="1900">1900</option>
+      <option value="2000">2000</option>
+      <option value="2100">2100</option>
+      <option value="2200">2200</option>
+      <option value="2300">2300</option>
+      <option value="2400">2400</option>
+      <option value="2500">2500</option>
+      <option value="2600">2600</option>
+      <option value="2700">2700</option>
+      <option value="2800">2800</option>
+      <option value="2900">2900</option>
+      <option value="3000">3000</option>
+      <option value="3100">3100</option>
+      <option value="3200">3200</option>
+      <option value="3300">3300</option>
+      <option value="3400">3400</option>
+      <option value="3500">3500</option>
+    </select>
+    <input
+      type="text"
+      id="tagInput"
+      list="tagSuggestions"
+      placeholder="Enter tags (comma-separated)"
+    />
+    <datalist id="tagSuggestions"></datalist>
+    <div id="tagList"></div>
+    <button id="save">Save Settings</button>
+    <button id="newProblem">Get New Problem</button>
+    <div id="killSwitchContainer">
+      <input type="number" id="killSwitchDuration" min="1" value="1" />
+      <label for="killSwitchDuration">day(s)</label>
+      <button id="killSwitch">Turn Off</button>
+    </div>
+    <div id="status"></div>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
